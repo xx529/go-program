@@ -11,6 +11,15 @@ func stop() {
 	time.Sleep(1 * time.Second)
 }
 
+func openBrowser() {
+	cmd := exec.Command("open", RunningUrl)
+	err := cmd.Start()
+	if err != nil {
+		fmt.Println("running at", RunningUrl)
+		return
+	}
+}
+
 func installFunc(s *widget.Label, p *widget.ProgressBar, t *widget.Label) func() {
 	return func() {
 		s.SetText("")
@@ -30,11 +39,6 @@ func installFunc(s *widget.Label, p *widget.ProgressBar, t *widget.Label) func()
 		p.SetValue(1.0)
 		t.SetText("finish installation")
 		stop()
-		cmd := exec.Command("open", RunningUrl)
-		err := cmd.Start()
-		if err != nil {
-			fmt.Println("running at", RunningUrl)
-			return
-		}
+		openBrowser()
 	}
 }
