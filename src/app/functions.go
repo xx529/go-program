@@ -14,6 +14,7 @@ func stop() {
 // 安装按钮执行的函数
 func installFunc(s *widget.Label, p *widget.ProgressBar, t *widget.Label) func() {
 	return func() {
+
 		s.SetText("")
 		stop()
 		p.SetValue(0.2)
@@ -32,6 +33,7 @@ func installFunc(s *widget.Label, p *widget.ProgressBar, t *widget.Label) func()
 		t.SetText("finish installation")
 		stop()
 		openBrowser(RunningUrl)
+
 	}
 }
 
