@@ -5,6 +5,7 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
+	"runtime"
 )
 
 func RunApp() {
@@ -48,7 +49,6 @@ func layout(buttonInstall *widget.Button, progressBar *widget.ProgressBar, progr
 
 	// 垂直布局
 	content := container.NewVBox(
-		container.NewCenter(widget.NewLabel("Select your action")),
 		widget.NewLabel(""),
 		horizontalLayout,
 		widget.NewLabel(""),
@@ -58,6 +58,8 @@ func layout(buttonInstall *widget.Button, progressBar *widget.ProgressBar, progr
 		container.NewCenter(statusText),
 		widget.NewLabel(""),
 		widget.NewLabel(""),
+		container.NewCenter(widget.NewLabel("OS: "+runtime.GOOS)),
+		container.NewCenter(widget.NewLabel("ARCH: "+runtime.GOARCH)),
 		container.NewCenter(dockerText),
 	)
 	return content
