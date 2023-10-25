@@ -74,7 +74,7 @@ func openBrowser(url string) {
 	cmd := exec.Command("open", url)
 	err := cmd.Start()
 	if err != nil {
-		fmt.Println("running at", url)
+		fmt.Println("open with your browser", url)
 		return
 	}
 }
