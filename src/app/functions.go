@@ -47,6 +47,16 @@ func dockerVersion(l *widget.Label) {
 	}
 }
 
+// 获取 docker compose 版本
+func dockerComposeVersion(l *widget.Label) {
+	out, err := exec.Command("docker-compose", "version", "--short").Output()
+	if err != nil {
+		l.SetText("Docker Compose Version: not installed")
+	} else {
+		l.SetText("Docker Compose Version: " + string(out))
+	}
+}
+
 // 启动docker客户端
 func startDocker(l *widget.Label) {
 	l.SetText("starting docker... \n")
