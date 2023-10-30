@@ -24,8 +24,11 @@ func newPageElements() *pageElements {
 		statusText:        widget.NewLabel(""),
 		dockerVersionInfo: widget.NewLabel("checking docker version...\n"),
 		dockerComposeInfo: widget.NewLabel("checking docker compose version...\n"),
-		buttonInstall:     widget.NewButton("Install", nil),
+		buttonInstall:     nil,
 	}
+
+	p.buttonInstall = widget.NewButton("Install", installFunc(p.statusText, p.progressBar, p.progressText))
+
 	p.progressBar.Min = 0
 	p.progressBar.Max = 1
 	return &p
@@ -65,9 +68,9 @@ func RunApp() {
 	elements := newPageElements()
 
 	// 创建进度条
-	progressBar := widget.NewProgressBar()
-	progressBar.Min = 0
-	progressBar.Max = 1
+	//progressBar := widget.NewProgressBar()
+	//progressBar.Min = 0
+	//progressBar.Max = 1
 
 	//// 进度条文字提示
 	//progressText := widget.NewLabel("")
