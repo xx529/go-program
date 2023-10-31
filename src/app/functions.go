@@ -16,14 +16,15 @@ func installFunc(s *widget.Label, p *widget.ProgressBar, t *widget.Label) func()
 	return func() {
 
 		s.SetText("")
-		stop()
-		p.SetValue(0.2)
+
 		t.SetText("checking docker version...")
-		stop()
+		dockerVersion(t)
 		p.SetValue(0.3)
+
 		t.SetText("checking docker compose version...")
-		stop()
 		p.SetValue(0.5)
+		dockerComposeVersion(t)
+
 		t.SetText("loading images...")
 		stop()
 		p.SetValue(0.7)
@@ -33,7 +34,6 @@ func installFunc(s *widget.Label, p *widget.ProgressBar, t *widget.Label) func()
 		t.SetText("finish installation")
 		stop()
 		openBrowser(RunningUrl)
-
 	}
 }
 
@@ -53,13 +53,13 @@ func dockerComposeVersion(l *widget.Label) {
 	if err != nil {
 		l.SetText("Docker Compose Version: not installed")
 	} else {
-		l.SetText("Docker Compose Version: " + string(out))
+		l.SetText("Compose Version: " + string(out))
 	}
 }
 
 // 启动docker客户端
 func startDocker(l *widget.Label) {
-	l.SetText("starting docker... \n")
+	l.SetText("starting docker...")
 	err := exec.Command("open", "/Applications/Docker.app").Start()
 	if err != nil {
 		l.SetText("fail to start docker")
