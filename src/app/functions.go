@@ -28,9 +28,11 @@ func installFunc(s *widget.Label, p *widget.ProgressBar, t *widget.Label) func()
 		t.SetText("loading images...")
 		stop()
 		p.SetValue(0.7)
+
 		t.SetText("starting containers...")
 		stop()
 		p.SetValue(1.0)
+
 		t.SetText("finish installation")
 		stop()
 		openBrowser(RunningUrl)
