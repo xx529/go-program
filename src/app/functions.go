@@ -35,6 +35,8 @@ func installFunc(s *widget.Label, p *widget.ProgressBar, t *widget.Label) func()
 
 		t.SetText("finish installation")
 		stop()
+
+		t.SetText("open in browser")
 		openBrowser(RunningUrl)
 	}
 }
