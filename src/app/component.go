@@ -49,7 +49,6 @@ func (p *pageElements) createLayout() *fyne.Container {
 		container.NewCenter(p.progressText),
 		container.NewCenter(p.statusText),
 		widget.NewLabel(""),
-		widget.NewLabel(""),
 		container.NewCenter(widget.NewLabel("OS: "+runtime.GOOS)),
 		container.NewCenter(widget.NewLabel("ARCH: "+runtime.GOARCH)),
 		container.NewCenter(p.dockerVersionInfo),
