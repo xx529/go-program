@@ -64,6 +64,9 @@ func dockerComposeVersion(l *widget.Label) {
 // 启动docker客户端
 func startDocker(l *widget.Label) {
 	l.SetText("starting docker...")
+
+	// windows中启动docker命令
+	// err := exec.Command("cmd", "/C", "start", "docker").Start()
 	err := exec.Command("open", "/Applications/Docker.app").Start()
 	if err != nil {
 		l.SetText("fail to start docker")
