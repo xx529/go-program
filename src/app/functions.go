@@ -4,86 +4,67 @@ import (
 	"fmt"
 	"fyne.io/fyne/v2/widget"
 	"os/exec"
-	"time"
 )
 
-func stop() {
-	time.Sleep(1 * time.Second)
-}
-
-// 安装按钮执行的函数
-func installFunc(s *widget.Label, p *widget.ProgressBar, t *widget.Label) func() {
+// 恢复按钮执行的函数
+func recoverFunc(st *widget.Label, pb *widget.ProgressBar, pt *widget.Label) func() {
 	return func() {
 
-		s.SetText("")
+		st.SetText("")
+		pb.SetValue(0.0)
 
-		t.SetText("checking docker version...")
-		dockerVersion(t)
-		p.SetValue(0.3)
+		pt.SetText("checking system...")
+		if !checkSystemIsWindows() {
+			st.SetText("only support windows")
+			pt.SetText("finished")
+			pb.SetValue(1.0)
+			return
+		}
 
-		t.SetText("checking docker compose version...")
-		p.SetValue(0.5)
-		dockerComposeVersion(t)
+		pt.SetText("checking docker is running or not...")
+		pb.SetValue(0.3)
+		if !checkDockerIsRunning() {
+			st.SetText("docker is not running")
 
-		t.SetText("loading images...")
-		stop()
-		p.SetValue(0.7)
+			pt.SetText("starting docker...")
+			pb.SetValue(0.6)
+			err := startDockerClient()
+			if err != nil {
+				st.SetText("fail to start docker")
+				pb.SetValue(1.0)
+			} else {
+				st.SetText("docker is running now")
+				pb.SetValue(1.0)
+			}
+		} else {
+			st.SetText("docker is running")
 
-		t.SetText("starting containers...")
-		stop()
-		p.SetValue(1.0)
+			st.SetText("stop docker...")
+			pb.SetValue(0.5)
+			err := stopDockerClient()
+			if err != nil {
+				st.SetText("fail to stop docker")
+				pb.SetValue(1.0)
+			} else {
+				st.SetText("docker is stopped")
+				pb.SetValue(0.7)
 
-		t.SetText("finish installation")
-		stop()
+				pt.SetText("starting docker...")
+				pb.SetValue(0.8)
+				err := startDockerClient()
+				if err != nil {
+					st.SetText("fail to start docker")
+					pb.SetValue(1.0)
+				} else {
+					st.SetText("docker is running now")
+					pb.SetValue(1.0)
+				}
+			}
 
-		t.SetText("open in browser")
+		}
+		pt.SetText("finished")
 		openBrowser(RunningUrl)
 	}
-}
-
-// 获取docker版本
-func dockerVersion(l *widget.Label) {
-	out, err := exec.Command("docker", "version", "--format", "'{{.Server.Version}}'").Output()
-	if err != nil {
-		startDocker(l)
-	} else {
-		l.SetText("Docker Version: " + string(out))
-	}
-}
-
-// 获取 docker compose 版本
-func dockerComposeVersion(l *widget.Label) {
-	out, err := exec.Command("docker-compose", "version", "--short").Output()
-	if err != nil {
-		l.SetText("Docker Compose Version: not installed")
-	} else {
-		l.SetText("Compose Version: " + string(out))
-	}
-}
-
-// 启动docker客户端
-func startDocker(l *widget.Label) {
-	l.SetText("starting docker...")
-
-	// windows中启动docker命令
-	// err := exec.Command("cmd", "/C", "start", "docker").Start()
-	err := exec.Command("open", "/Applications/Docker.app").Start()
-	if err != nil {
-		l.SetText("fail to start docker")
-	}
-
-	go func() {
-		for {
-			time.Sleep(1 * time.Second)
-			out, err := exec.Command("docker", "version", "--format", "'{{.Server.Version}}'").Output()
-			if err != nil {
-				continue
-			} else {
-				l.SetText("Docker Version: " + string(out))
-				return
-			}
-		}
-	}()
 }
 
 // 打开浏览器

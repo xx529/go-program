@@ -14,7 +14,7 @@ type pageElements struct {
 	statusText               *widget.Label       // 状态提示
 	dockerVersionInfo        *widget.Label       // docker 版本信息
 	dockerComposeVersionInfo *widget.Label       // docker compose 版本信息
-	buttonInstall            *widget.Button      // 安装按钮
+	buttonRecover            *widget.Button      // 恢复按钮
 }
 
 func newPageElements() *pageElements {
@@ -24,10 +24,10 @@ func newPageElements() *pageElements {
 		statusText:               widget.NewLabel(""),
 		dockerVersionInfo:        widget.NewLabel(""),
 		dockerComposeVersionInfo: widget.NewLabel(""),
-		buttonInstall:            nil,
+		buttonRecover:            nil,
 	}
 
-	p.buttonInstall = widget.NewButton("Install", installFunc(p.statusText, p.progressBar, p.progressText))
+	p.buttonRecover = widget.NewButton("Install", recoverFunc(p.statusText, p.progressBar, p.progressText))
 
 	p.progressBar.Min = 0
 	p.progressBar.Max = 1
@@ -37,7 +37,7 @@ func newPageElements() *pageElements {
 func (p *pageElements) createLayout() *fyne.Container {
 
 	// 按钮水平布局
-	horizontalLayout := container.NewCenter(p.buttonInstall)
+	horizontalLayout := container.NewCenter(p.buttonRecover)
 
 	// 垂直布局
 	content := container.NewVBox(
@@ -66,10 +66,6 @@ func RunApp() {
 
 	// 创建所有元素
 	elements := newPageElements()
-
-	// 启动docker客户端
-	dockerVersion(elements.dockerVersionInfo)
-	dockerComposeVersion(elements.dockerComposeVersionInfo)
 
 	// 布局
 	content := elements.createLayout()
